@@ -1,0 +1,255 @@
+
+html, body, #container {
+  height: 100%;
+  width: 100%;
+  font-family:  'Lato'
+}
+
+#container {
+  position: fixed;
+  top: 0;
+  padding-top: 52px;
+}
+
+#map {
+    width: auto;
+    height: 100%;
+}
+
+/* sidebar view*/
+.sidebar {
+  height: auto;
+  width: 300px;
+  position: fixed;
+  top: 0;
+  right: -330px;
+ /* right:0;*/
+  bottom: 0;
+  background: #EEEEEC;
+  margin: 30px;
+  box-sizing: border-box;
+  border-radius: 7px;
+  border: 1px solid #979797;
+  color: #81827F;
+  padding: 0 25px;
+
+}
+
+.sidebar h1 {
+  font: 800 27px Lato;
+  text-transform: uppercase;
+}
+
+.sidebar h2 {
+  font: 500 15px Lato;
+  text-transform: uppercase;
+}
+
+.sidebar .section {
+  border-bottom: 2px solid #BCBCBA;
+  padding: 15px 0;
+}
+
+.sidebar .section:last-child {
+  border-bottom: none;
+}
+
+.valueBox {
+  margin-bottom:10px;
+}
+.valueBox:last-child {
+  margin-bottom:0;
+}
+
+.valueBox h2 {
+  font:300 13px Lato;
+}
+
+.sidebar .close {
+  position: absolute;
+  right: -300px;
+  top: 0;
+  padding: 15px;
+  font-size: 20px;
+}
+
+.sidebar .close:hover {
+  cursor:pointer;
+  color:red;
+}
+
+/*tooltip view */
+
+
+/*hide built-in tooltips*/
+div.cartodb-tooltip {
+  font: 200 14px Lato;
+  text-transform: uppercase;
+  max-width: 400px;
+  display: none !important;
+}
+
+div.cartodb-tooltip h1 {
+    margin-bottom: -4px;
+}
+
+.tooltip-section {
+  margin-bottom:10px;
+}
+
+#infoWindow {
+  position: absolute;
+}
+
+.breakdownItem div{
+  display:inline-block;
+}
+
+.breakdownItem .count {
+  font: 800 15px Lato;
+}
+
+.breakdownItem .type {
+  font: 300 11px Lato;
+  text-transform: uppercase;
+}
+
+button.state {
+    position: absolute;
+    top: 10px;
+    left: 50px;
+    z-index: 1;
+}
+
+.hidden {
+  display:none;
+}
+
+
+/*new for property tax project*/
+
+
+/*custom bootstrap navbar*/
+
+.navbar-custom {
+  background-color: #1c278a;
+  border-color: #161f6e;
+  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#2533b4), to(#1c278a));
+  background-image: -webkit-linear-gradient(top, #2533b4, 0%, #1c278a, 100%);
+  background-image: -moz-linear-gradient(top, #2533b4 0%, #1c278a 100%);
+  background-image: linear-gradient(to bottom, #2533b4 0%, #1c278a 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff2533b4', endColorstr='#ff1c278a', GradientType=0);
+  border-radius: 0;
+  z-index: 10;
+}
+.navbar-custom .navbar-brand {
+  color: #ffffff;
+}
+.navbar-custom .navbar-brand:hover,
+.navbar-custom .navbar-brand:focus {
+  color: #e6e6e6;
+  background-color: transparent;
+}
+.navbar-custom .navbar-text {
+  color: #ffffff;
+}
+.navbar-custom .navbar-nav > li:last-child > a {
+  border-right: 1px solid #161f6e;
+}
+.navbar-custom .navbar-nav > li > a {
+  color: #ffffff;
+  border-left: 1px solid #161f6e;
+}
+.navbar-custom .navbar-nav > li > a:hover,
+.navbar-custom .navbar-nav > li > a:focus {
+  color: #c0c0c0;
+  background-color: transparent;
+}
+.navbar-custom .navbar-nav > .active > a,
+.navbar-custom .navbar-nav > .active > a:hover,
+.navbar-custom .navbar-nav > .active > a:focus {
+  color: #c0c0c0;
+  background-color: #161f6e;
+  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#161f6e), to(#1f2b99));
+  background-image: -webkit-linear-gradient(top, #161f6e, 0%, #1f2b99, 100%);
+  background-image: -moz-linear-gradient(top, #161f6e 0%, #1f2b99 100%);
+  background-image: linear-gradient(to bottom, #161f6e 0%, #1f2b99 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff161f6e', endColorstr='#ff1f2b99', GradientType=0);
+}
+.navbar-custom .navbar-nav > .disabled > a,
+.navbar-custom .navbar-nav > .disabled > a:hover,
+.navbar-custom .navbar-nav > .disabled > a:focus {
+  color: #cccccc;
+  background-color: transparent;
+}
+.navbar-custom .navbar-toggle {
+  border-color: #dddddd;
+}
+.navbar-custom .navbar-toggle:hover,
+.navbar-custom .navbar-toggle:focus {
+  background-color: #dddddd;
+}
+.navbar-custom .navbar-toggle .icon-bar {
+  background-color: #cccccc;
+}
+.navbar-custom .navbar-collapse,
+.navbar-custom .navbar-form {
+  border-color: #161f6c;
+}
+.navbar-custom .navbar-nav > .dropdown > a:hover .caret,
+.navbar-custom .navbar-nav > .dropdown > a:focus .caret {
+  border-top-color: #c0c0c0;
+  border-bottom-color: #c0c0c0;
+}
+.navbar-custom .navbar-nav > .open > a,
+.navbar-custom .navbar-nav > .open > a:hover,
+.navbar-custom .navbar-nav > .open > a:focus {
+  background-color: #161f6e;
+  color: #c0c0c0;
+}
+.navbar-custom .navbar-nav > .open > a .caret,
+.navbar-custom .navbar-nav > .open > a:hover .caret,
+.navbar-custom .navbar-nav > .open > a:focus .caret {
+  border-top-color: #c0c0c0;
+  border-bottom-color: #c0c0c0;
+}
+.navbar-custom .navbar-nav > .dropdown > a .caret {
+  border-top-color: #ffffff;
+  border-bottom-color: #ffffff;
+}
+@media (max-width: 767) {
+  .navbar-custom .navbar-nav .open .dropdown-menu > li > a {
+    color: #ffffff;
+  }
+  .navbar-custom .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-custom .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #c0c0c0;
+    background-color: transparent;
+  }
+  .navbar-custom .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-custom .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-custom .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #c0c0c0;
+    background-color: #161f6e;
+  }
+  .navbar-custom .navbar-nav .open .dropdown-menu > .disabled > a,
+  .navbar-custom .navbar-nav .open .dropdown-menu > .disabled > a:hover,
+  .navbar-custom .navbar-nav .open .dropdown-menu > .disabled > a:focus {
+    color: #cccccc;
+    background-color: transparent;
+  }
+}
+.navbar-custom .navbar-link {
+  color: #ffffff;
+}
+.navbar-custom .navbar-link:hover {
+  color: #c0c0c0;
+}
+
+.btn-group-main {
+  position: absolute;
+  top: 63px;
+  left: 48px;
+}

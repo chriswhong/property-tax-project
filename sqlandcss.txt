@@ -1,0 +1,113 @@
+Tax Lot View
+
+  SELECT a.cartodb_id, a.ownername,a.address,a.the_geom,a.the_geom_webmercator,a.bbl, a.condono,
+
+  CASE WHEN b.condo ='' THEN b.propertytax ELSE  c.propertytax END as propertytax
+  FROM pluto15v1 a
+  LEFT JOIN june15bbls b
+  ON a.bbl = b.bbl
+  LEFT JOIN (
+  SELECT condonumber,sum(propertytax) as propertytax 
+    FROM june15bbls
+    WHERE condo = 'unit'
+    GROUP BY condonumber
+  ) c
+  ON a.condono::text = c.condonumber
+
+  /** choropleth visualization */
+
+  #pluto15v1{
+    polygon-fill: #EDF8FB;
+    polygon-opacity: 0.8;
+    line-color: #bfbebe;
+    line-width: 0;
+    line-opacity: 1;
+  }
+  #pluto15v1 [ propertytax <= 67339815] {
+     polygon-fill: #005824;
+  }
+  #pluto15v1 [ propertytax <= 1593678] {
+     polygon-fill: #238B45;
+  }
+  #pluto15v1 [ propertytax <= 38991] {
+     polygon-fill: #41AE76;
+  }
+  #pluto15v1 [ propertytax <= 20356] {
+     polygon-fill: #66C2A4;
+  }
+  #pluto15v1 [ propertytax <= 5757] {
+     polygon-fill: #CCECE6;
+  }
+  #pluto15v1 [ propertytax <= 4531] {
+     polygon-fill: #D7FAF4;
+  }
+  #pluto15v1 [ propertytax <= 4157] {
+     polygon-fill: #EDF8FB;
+  }
+  #pluto15v1 [ propertytax = 0] {
+     polygon-fill: #ff00a5;
+  }
+
+  #pluto15v1 [ condono > 0] {
+     line-color: #e8ff00;
+     line-width: 1;
+  }
+
+Council District Choropleth
+
+  SELECT the_geom, the_geom_webmercator, coundist, propertytax FROM councildistricts15 z LEFT JOIN (SELECT SUM(x.propertytax) AS propertytax, 
+         x.council 
+  FROM   (SELECT a.cartodb_id, 
+                 a.ownername, 
+                 a.address, 
+                 a.the_geom, 
+                 a.the_geom_webmercator, 
+                 a.bbl, 
+                 a.condono, 
+                 a.council, 
+                 CASE 
+                   WHEN b.condo = '' THEN b.propertytax 
+                   ELSE c.propertytax 
+                 END AS propertytax 
+          FROM   pluto15v1 a 
+                 left join june15bbls b 
+                        ON a.bbl = b.bbl 
+                 left join (SELECT condonumber, 
+                                   SUM(propertytax) AS propertytax 
+                            FROM   june15bbls 
+                            WHERE  condo = 'unit' 
+                            GROUP  BY condonumber) c 
+                        ON a.condono :: text = c.condonumber) x 
+  GROUP  BY council) y
+  ON z.coundist = y.council
+
+  /** choropleth visualization */
+
+#councildistricts15{
+  polygon-fill: #EDF8FB;
+  polygon-opacity: 0.8;
+  line-color: #FFF;
+  line-width: 0.5;
+  line-opacity: 1;
+}
+#councildistricts15 [ propertytax <= 5633754171.01] {
+   polygon-fill: #005824;
+}
+#councildistricts15 [ propertytax <= 802391326] {
+   polygon-fill: #238B45;
+}
+#councildistricts15 [ propertytax <= 418911674] {
+   polygon-fill: #41AE76;
+}
+#councildistricts15 [ propertytax <= 332561740] {
+   polygon-fill: #66C2A4;
+}
+#councildistricts15 [ propertytax <= 269041259] {
+   polygon-fill: #CCECE6;
+}
+#councildistricts15 [ propertytax <= 191714169] {
+   polygon-fill: #D7FAF4;
+}
+#councildistricts15 [ propertytax <= 144260752] {
+   polygon-fill: #EDF8FB;
+}

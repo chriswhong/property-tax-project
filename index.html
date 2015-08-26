@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta content="" name="description">
+    <meta content="" name="author">
+    <link href="./favicon.ico" rel="icon">
+
+    <title>Tax Man Cometh</title>
+    <link href=
+    "https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/themes/css/cartodb.css" rel="stylesheet">
+    <link href="./css/nv.d3.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/leaflet.draw.css">
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="css/app.css" rel="stylesheet" type="text/css">
+    <link href="./favicon.png" rel="icon" type="image/png">
+</head>
+
+<body>  
+    <nav class="navbar navbar-custom" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Tax Man Cometh</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="#">About</a></li>
+                <li><a href="#">Get the Data</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="#">About</a></li>
+                      <li><a href="#">Get Data</a></li>
+                      <li><a href="#">Something else here</a></li>
+                      <li><a href="#">Separated link</a></li>
+                      <li><a href="#">One more separated link</a></li>
+                  </ul>
+              </li>
+          </ul>
+          <form class="navbar-form navbar-right" role="search">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Address Search">
+            </div>
+        </form>
+    </div><!-- /.navbar-collapse -->
+</nav>
+<div id="container">
+    <div id="map" class="u-pa">
+
+    </div>
+    <div class="btn-group btn-group-main" role="group" aria-label="...">
+      <button type="button" class="btn btn-default lots">Tax Lots</button>
+      <button type="button" class="btn btn-default councilDistricts">Council Districts</button>
+    </div>
+</div>
+<script type="text/template" id="zipInfo-template">
+    <div class="cartodb-tooltip-content-wrapper">
+        <div class="cartodb-tooltip-content">
+            <div class='tooltip-section'>
+                <h1>{{city}}, {{state}}</h1>
+                <div class='zip'>{{geoid10}}</div>
+            </div>
+            <div class='tooltip-section'>
+                <div class='tiv'>TIV: {{tivPretty}}</div>
+                <div class='civ'>CIV: </div>
+            </div>
+            <div class='totalPolicies'>Total Policies: {{policies}}</div>
+        </div>
+    </div>
+</script>
+<script type="text/template" id="sidebar-template">
+    <div class="close">✖</div>
+    <div class="section">
+        <h1>{{city}}</h1><h1>
+    </h1><h2>{{zipcode}}</h2>
+</div>
+<div class="section">
+    <div class="valueBox">
+        <h1>${{tiv}}</h1>
+        <h2>Total Insured Value</h2>
+    </div>
+    <div class="valueBox">
+        <h1>$945,234,305</h1>
+        <h2>Total Insured Value</h2>
+    </div>
+</div>
+<div class="section">
+    <div class="valueBox">
+        <h1>{{policies}}</h1>
+        <h2>Total Assets in {{zipcode}}</h2>
+    </div>
+    <div class='breakdownItem'>
+        <div class='count'>{{office}}</div>
+        <div class='type'>Offices</div>
+    </div>
+    <div class='breakdownItem'>
+        <div class='count'>{{education}}</div>
+        <div class='type'>Education</div>
+    </div>
+    <div class='breakdownItem'>
+        <div class='count'>{{factory}}</div>
+        <div class='type'>Factories</div>
+    </div>
+    <div class='breakdownItem'>
+        <div class='count'>{{medical}}</div>
+        <div class='type'>Medical Facilites</div>
+    </div>
+    <div class='breakdownItem'>
+        <div class='count'>{{warehouse}}</div>
+        <div class='type'>Warehouses</div>
+    </div>
+</div>
+
+</script>
+<script type="text/template" id="sidebarQuery-template">
+
+</script>
+<script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> 
+<script src=
+"https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.13/cartodb.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.js"></script> 
+<script src=
+"./js/nv.d3.js"></script> 
+<script src="js/leaflet.draw.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.1.2/mustache.js"></script>
+<script src="js/numeral.js"></script>
+
+<script src="js/bootstrap.min.js"></script>
+<script src="js/backbone.js"></script>
+<script src="js/models/infoWindow.js"></script>
+<script src="js/models/sidebar.js"></script>
+<script src="js/views/app.js"></script>
+<script src="js/views/infoWindow.js"></script>
+<script src="js/views/sidebar.js"></script>
+<script src="js/routers/router.js"></script>
+<script src="js/app.js"></script>
+
+
+<!-- <script src="./js/script.js"></script> -->
+</body>
+</html>
