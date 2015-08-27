@@ -45,15 +45,18 @@ var app = app || {};
       var layerUrl = 'https://cwhong.cartodb.com/api/v2/viz/b376f4b2-4bf1-11e5-a95c-0e853d047bba/viz.json';
 
       var view = this;
+
+      //listen for events to update the url
+      map.on('zoomend',function(){view.setURL()});
+      map.on('dragend',function(){view.setURL()});
+
       cartodb.createLayer(map, layerUrl)
       .addTo(map)
       .on('done', function(layer) {
         view.layer = layer;
         view.initializeMap(view, map)
       })
-    
-      
-
+  
     },
 
     initializeMap: function(view, map) {
@@ -151,19 +154,20 @@ var app = app || {};
       },
  
     showLots: function() {
-      console.log('showLots()');
       this.hideAllLayers();
+      this.currentLayer = 'lots';
       $('button.lots').addClass('active');
       this.layer.getSubLayer(0).show();
-      Backbone.history.navigate('map/lots'); 
+      //Backbone.history.navigate('map/lots'); 
+      this.setURL();
     },
 
     showCouncilDistricts: function() {
-      
       this.hideAllLayers();
+      this.currentLayer = 'councildistricts';
       $('button.councilDistricts').addClass('active');
       this.layer.getSubLayer(1).show();
-      Backbone.history.navigate('map/councildistricts'); 
+      this.setURL();
     },
 
     hideAllLayers: function() {
@@ -180,6 +184,21 @@ var app = app || {};
       //console.log(e.pageX,e.pageY)
       //set x and y in the model for the infowindow
       this.infoWindowModel.set({x:e.pageX,y:e.pageY})
+    },
+
+    setURL: function() {
+      var zoom = this.map.getZoom();
+      var center = this.map.getCenter();
+      var zoomCenter = zoom + '/' + center.lat.toFixed(3) + '/' + center.lng.toFixed(3);
+    
+      Backbone.history.navigate('map/' + this.currentLayer + '/' + zoomCenter); 
+
+    },
+
+    setView: function(zoom, lat, lon) {
+      this.map.setView(new L.latLng([lat,lon]),zoom);
     }
+
+
   });
 })(jQuery);

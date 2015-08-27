@@ -8,11 +8,11 @@ var app = app || {};
   // ----------
   app.Router = Backbone.Router.extend({
     routes: {
-      "map/:type": "getMap",
+      "map/:type/:zoom/:lat/:lon": "getMap",
        "*actions": "defaultRoute" 
     },
 
-    getMap: function(type) {
+    getMap: function(type,zoom,lat,lon) {
       console.log('getMap()');
       switch(type) {
         case 'lots':
@@ -21,7 +21,9 @@ var app = app || {};
         case 'councildistricts':
           app.appView.showCouncilDistricts();
           break;
-      }
+      };
+
+      app.appView.setView(zoom,lat,lon);
     },
 
     defaultRoute: function(actions) {
