@@ -22,10 +22,20 @@ var app = app || {};
       var d = this.model.toJSON();
       console.log(d);
 
+      d.emv = this.formatNumber(d.emv);
+      d.bav = this.formatNumber(d.bav);
+      d.tbea = this.formatNumber(d.tbea);
+      d.propertytax = this.formatNumber(d.propertytax);
+
       this.$el.html(Mustache.to_html(this.template,d));
 
       return this;
     },
+
+    formatNumber: function(number) {
+      return numeral(number).format('$0.00a');
+    },
+
 
     slideIn: function () {
       this.$el.animate({

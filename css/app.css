@@ -21,9 +21,9 @@ html, body, #container {
   height: auto;
   width: 300px;
   position: fixed;
-  top: 0;
+  top: 55px;
   right: -330px;
- /* right:0;*/
+  /*right:0;*/
   bottom: 0;
   background: #EEEEEC;
   margin: 30px;
@@ -76,6 +76,20 @@ html, body, #container {
 .sidebar .close:hover {
   cursor:pointer;
   color:red;
+}
+
+
+.sidebar .value {
+  font-size: 34px;
+  text-transform: uppercase;
+  margin:0;
+}
+
+.sidebar .label {
+  color: #81827F;
+  position: relative;
+  top: -8px;
+  left: -6px;
 }
 
 /*tooltip view */
@@ -253,3 +267,71 @@ button.state {
   top: 63px;
   left: 48px;
 }
+
+/*Custom Legend*/
+
+.customLegend {
+  width: 125px;
+  box-sizing:border-box;
+}
+
+.customLegend .legendItem {
+    height:22px;
+    width:100%;
+  }
+
+  .customLegend .labelText {
+    height: 22px;
+    padding-top: 3px;
+    box-sizing: border-box;
+    text-align: right;
+    width: 80px;
+  }
+
+  .customLegend .left {
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding;
+    background-clip: padding;
+    /* box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2); */
+    border: 1px solid #b3b3b3;
+    width:30px;
+    display:inline-block;
+    vertical-align: top;
+    margin-right: 10px;
+
+  }
+
+  .customLegend .right {
+    display:inline-block;
+    vertical-align: top;
+  }
+
+  .customLegend h3 {
+    margin-top: 0;
+    font-size: 1.17em;
+    margin-bottom: 10px;
+    font-weight:800;
+  }
+
+  .customLegend h4 {
+    font: normal 13px "Helvetica",Arial;
+    margin-bottom: 10px;
+    font-weight:800;
+  }
+
+  .customLegend p {
+    margin-bottom: 7px;
+  }
+
+  .customLegend .legendRow {
+    margin-bottom: 10px;
+  }
+
+  .customLegend .noBorder {
+    border:none;
+  }

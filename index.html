@@ -64,67 +64,63 @@
     <div class="btn-group btn-group-main" role="group" aria-label="...">
       <button type="button" class="btn btn-default lots">Tax Lots</button>
       <button type="button" class="btn btn-default councilDistricts">Council Districts</button>
+      <button type="button" class="btn btn-default draw">Draw an Area</button>
     </div>
 </div>
-<script type="text/template" id="zipInfo-template">
+<script type="text/template" id="infoWindow-template">
     <div class="cartodb-tooltip-content-wrapper">
         <div class="cartodb-tooltip-content">
-            <div class='tooltip-section'>
-                <h1>{{city}}, {{state}}</h1>
-                <div class='zip'>{{geoid10}}</div>
-            </div>
-            <div class='tooltip-section'>
-                <div class='tiv'>TIV: {{tivPretty}}</div>
-                <div class='civ'>CIV: </div>
-            </div>
-            <div class='totalPolicies'>Total Policies: {{policies}}</div>
+            <p class='title'>{{title}}</p>
+            <p class='value'>{{value}}</p>
+           
         </div>
     </div>
 </script>
 <script type="text/template" id="sidebar-template">
-    <div class="close">✖</div>
-    <div class="section">
-        <h1>{{city}}</h1><h1>
-    </h1><h2>{{zipcode}}</h2>
-</div>
-<div class="section">
-    <div class="valueBox">
-        <h1>${{tiv}}</h1>
-        <h2>Total Insured Value</h2>
-    </div>
-    <div class="valueBox">
-        <h1>$945,234,305</h1>
-        <h2>Total Insured Value</h2>
-    </div>
-</div>
-<div class="section">
-    <div class="valueBox">
-        <h1>{{policies}}</h1>
-        <h2>Total Assets in {{zipcode}}</h2>
-    </div>
-    <div class='breakdownItem'>
-        <div class='count'>{{office}}</div>
-        <div class='type'>Offices</div>
-    </div>
-    <div class='breakdownItem'>
-        <div class='count'>{{education}}</div>
-        <div class='type'>Education</div>
-    </div>
-    <div class='breakdownItem'>
-        <div class='count'>{{factory}}</div>
-        <div class='type'>Factories</div>
-    </div>
-    <div class='breakdownItem'>
-        <div class='count'>{{medical}}</div>
-        <div class='type'>Medical Facilites</div>
-    </div>
-    <div class='breakdownItem'>
-        <div class='count'>{{warehouse}}</div>
-        <div class='type'>Warehouses</div>
-    </div>
-</div>
+   <h1>District {{coundist}}</h1>
+   <div class='sidebarItem'>
+    <p class='value'>{{count}}</p>
+    <p class='label'>Tax Bills in this district</p>
+    
+  </div>
+   <div class='sidebarItem'>
+    <p class='value'>{{emv}}</p>
+    <p class='label'>Combined Estimated Market Value</p>
+    
+  </div>
+  <div class='sidebarItem'>
+    <p class='value'>{{bav}}</p>
+    <p class='label'>Combined Billable Assessed Value</p> 
+  </div>
+  <div class='sidebarItem'>
+    <p class='value'>{{tbea}}</p>
+    <p class='label'>Combined Tax Before Exemptions and Abatements</p> 
+  </div>
+  <div class='sidebarItem'>
+    <p class='value'>{{propertytax}}</p>
+    <p class='label'>Combined Total Billable Tax</p> 
+  </div>
+
 
 </script>
+
+
+<script type="text/template" id="polygonSummary-template">
+  SELECT count(*), sum(emv) as emv, sum(bav) as bav, sum(tbea) as tbea, sum(tba) as tba, sum(propertytax) as propertytax FROM (SELECT a.the_geom, b.bav,b.emv,b.tba, b.tbea, CASE WHEN b.condo ='' THEN b.propertytax ELSE  c.propertytax END as propertytax
+FROM pluto15v1 a
+LEFT JOIN june15bbls b
+ON a.bbl = b.bbl
+LEFT JOIN (
+SELECT condonumber,sum(propertytax) as propertytax 
+  FROM june15bbls
+  WHERE condo = 'unit'
+  GROUP BY condonumber
+) c
+ON a.condono::text = c.condonumber) x, (SELECT the_geom as geom FROM councildistricts15 WHERE coundist = '{{coundist}}') y
+WHERE ST_Within(x.the_geom,y.geom)  
+
+</script>
+
 <script type="text/template" id="sidebarQuery-template">
 
 </script>

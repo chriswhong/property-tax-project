@@ -14,10 +14,16 @@ var app = app || {};
     events: {
       'mousemove #map':'moveInfoWindow',
       'click button.lots':'showLots',
-      'click button.councilDistricts':'showCouncilDistricts'
+      'click button.councilDistricts':'showCouncilDistricts',
+      'click button.draw':'showDraw'
     },
 
     initialize: function() {
+      var that = this;
+
+      this.hoverID = -1;
+
+      this.sql = new cartodb.SQL({ user: 'cwhong' });
 
       //add the infoWindowView
       this.infoWindowModel = new app.InfoWindowModel();
@@ -30,128 +36,85 @@ var app = app || {};
       this.$el.append(this.sidebarView.render().el);
 
       //init map
-      var map = new L.Map('map', { 
+      this.map  = new L.Map('map', { 
         center: [40.695998,-73.999443],
         zoom: 11
       });
 
-      this.map = map;
-
       //dark matter basemap
       var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
-      }).addTo(map);
+      }).addTo(this.map);
       //cartodb published map with asset and weather layers
       var layerUrl = 'https://cwhong.cartodb.com/api/v2/viz/b376f4b2-4bf1-11e5-a95c-0e853d047bba/viz.json';
 
-      var view = this;
 
       //listen for events to update the url
-      map.on('zoomend',function(){view.setURL()});
-      map.on('dragend',function(){view.setURL()});
+      this.map.on('zoomend',function(){that.setURL()});
+      this.map.on('dragend',function(){that.setURL()});
 
-      cartodb.createLayer(map, layerUrl)
-      .addTo(map)
+      cartodb.createLayer(this.map, layerUrl)
+      .addTo(this.map)
       .on('done', function(layer) {
-        view.layer = layer;
-        view.initializeMap(view, map)
+        that.layer = layer;
+        that.initializeMap();
       })
   
+      this.leafletDrawInit();
+
     },
 
-    initializeMap: function(view, map) {
-
+    initializeMap: function() {
+      var that = this;
       //hide all layers
 
       this.hideAllLayers();
 
-      var baseAPI = 'https://chriswhong.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom, cartodb_id FROM nyzctas WHERE cartodb_id = '
-      var layerGroup = new L.LayerGroup();
-      
-      var polygon;
-      var currentHover, newFeature = null;
+      this.councilDistrictsLayer = this.layer.getSubLayer(1);
+      this.councilDistrictsLayer.setInteraction(true);
+      this.councilDistrictsLayer.setInteractivity('cartodb_id,coundist,propertytax');
 
+   
 
-      // layer.on('featureOver', function(ev, pos, latlng, data){
-      //   if (view.mode == 'state') {
+      this.councilDistrictsLayer.on('featureOver', function(ev, pos, latlng, data){
+        //show the infowindow
+        var d = {
+          visible:true,
+          title: 'District ' + data.coundist,
+          value: that.formatNumber(data.propertytax)
+        };
 
-      //     //update the infoWindowModel
-      //     data.visible = true;
-      //     view.infoWindowModel.set(data);
+        that.infoWindowModel.set(d);
 
-      //     //check to see if it's the same feature so we don't waste an API call
-      //     if((data.cartodb_id != currentHover || layerGroup.getLayers().length > 1)) {
-      //       layerGroup.clearLayers();
-            
-      //       $.getJSON(baseAPI + data.cartodb_id, function(res) {
-          
-      //         polygon = res;
-
-      //         newFeature = L.geoJson(res,{
-      //           onEachFeature:onEachFeature,
-      //           style: {
-      //             "color": "steelblue",
-      //             "weight": 2,
-      //             "opacity": 1
-      //           }
-      //         });
-      //         layerGroup.addLayer(newFeature)
-      //         layerGroup.addTo(map);
-      //       })
-      //       currentHover = data.cartodb_id;
-      //     } 
-      //   }
-      // })
-      //   .on('featureOut', function() {
-      //     //layerGroup.clearLayers();
-      //     view.infoWindowModel.set({'visible':false})
-      //   });
-
-
-        function onEachFeature(feature, layer) {
-          layer.on('click', function (e) {
-
-            console.log(feature, layer);
-
-            view.modeChangeZip();
-            
-
-            var template = $('#sidebarQuery-template').text();
-
-            var apiCall = Mustache.render(template, feature.properties)
-            $.getJSON(apiCall,function(data){
-            
-              //set new data for sideBarModel here
-              view.sidebarModel.set(data.rows[0]);
-              view.sidebarView.slideIn();
-
-            });
-
-            
-
-              //console.log(e.target.feature.properties.cartodb_id);
-              //bring in the sidebar
-              map.fitBounds(layerGroup.getLayers()[0].getBounds());
-
-              newFeature = L.geoJson(polygon,{
-                onEachFeature:onEachFeature,
-                style: {
-                  "color": "red",
-                  "weight": 4,
-                  "opacity": 1
-                }
-              });
-              view.selectedLayerGroup.clearLayers();
-              view.selectedLayerGroup.addLayer(newFeature);
-              view.selectedLayerGroup.addTo(map);
-          });
+        //check to see if it's the same feature so we don't waste an API call
+        if(data.cartodb_id != that.hoverID) {
+          that.renderPolygon(data.cartodb_id);
+          that.hoverID = data.cartodb_id;
         }
-        // this.showLots();
 
+      })
+        .on('featureOut', function() {
+          that.infoWindowModel.set({visible:false});
+        })
+      ;
+
+      this.lotsLayer = this.layer.getSubLayer(0);
+      this.lotsLayer.setInteraction(true);
+      this.lotsLayer.setInteractivity('cartodb_id');
+
+      this.lotsLayer.on('featureClick', function(ev, pos, latlng, data){
+        console.log(data);
+      });
+
+    
         app.router = new app.Router();
         Backbone.history.start();
         console.log('finished initializing map');
       },
+
+    formatNumber: function(number) {
+      return numeral(number).format('$0.00a');
+    },
  
     showLots: function() {
       this.hideAllLayers();
@@ -166,8 +129,17 @@ var app = app || {};
       this.hideAllLayers();
       this.currentLayer = 'councildistricts';
       $('button.councilDistricts').addClass('active');
-      this.layer.getSubLayer(1).show();
+      this.councilDistrictsLayer.show();
       this.setURL();
+    },
+
+    showDraw: function() {
+      this.hideAllLayers();
+      this.currentLayer = 'lots';
+      $('button.draw').addClass('active');
+      this.layer.getSubLayer(0).show();
+
+      $('.leaflet-draw-toolbar').show();
     },
 
     hideAllLayers: function() {
@@ -197,8 +169,134 @@ var app = app || {};
 
     setView: function(zoom, lat, lon) {
       this.map.setView(new L.latLng([lat,lon]),zoom);
-    }
+    },
+
+    fetchPolygonData: function(geometry,callback) {
+      geometry = JSON.stringify(geometry);
+      console.log(geometry);
+
+      //var query = Mustache.render("SELECT Count(a.cartodb_id) AS policies, Sum(a.tiv) AS tiv, Count(CASE WHEN a.category = 'Office'THEN a.category END) AS office, Count(CASE WHEN a.category = 'Warehouse'THEN a.category END) AS warehouse, Count(CASE WHEN a.category = 'Education'THEN a.category END) AS education, Count(CASE WHEN a.category = 'Medical'THEN a.category END) AS medical, Count(CASE WHEN a.category = 'Factory'THEN a.category END) AS factory FROM ny30k a WHERE ST_CONTAINS(ST_SetSRID(ST_GeomFromGeoJSON('{{{geometry}}}'),4326),a.the_geom)",{geometry:geometry});
 
 
+      var query = Mustache.render("SELECT count(*), sum(emv) as emv, sum(bav) as bav, sum(tbea) as tbea, sum(tba) as tba, sum(propertytax) as propertytax FROM (SELECT a.the_geom, b.bav,b.emv,b.tba, b.tbea, CASE WHEN b.condo ='' THEN b.propertytax ELSE  c.propertytax END as propertytax FROM pluto15v1 a LEFT JOIN june15bbls b ON a.bbl = b.bbl LEFT JOIN ( SELECT condonumber,sum(propertytax) as propertytax FROM june15bbls WHERE condo = 'unit' GROUP BY condonumber) c ON a.condono::text = c.condonumber) x WHERE ST_CONTAINS(ST_SetSRID(ST_GeomFromGeoJSON('{{{geometry}}}'),4326),a.the_geom)",{geometry:geometry});
+
+      console.log(query);
+
+      this.sql.execute(query)
+      .done(function(d) {
+          //need to fix this in the db
+          d.civ = d.tiv;
+
+          //make up a total insured value
+          d.tiv = d.civ * (1 + ((Math.floor(Math.random() * 25) + 1)/100));
+
+          callback(d.rows[0]);
+    });
+
+  
+    
+
+    },
+
+    renderPolygon: function(cartodb_id) {
+      var that = this;
+      var baseAPI = 'https://cwhong.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT the_geom, cartodb_id, coundist FROM councildistricts15 WHERE cartodb_id = '
+        
+      //get the polygon as geoJSON        
+      $.getJSON(baseAPI + cartodb_id, function(res) {
+    
+        if(that.hoverPolygon) {
+          that.map.removeLayer(that.hoverPolygon);
+        }
+        that.hoverPolygon = L.geoJson(res,{
+          onEachFeature:onEachFeature,
+          style: {
+            "color": "steelblue",
+            "weight": 2,
+            "opacity": 1,
+            "fillOpacity": 0
+          }
+        }).addTo(that.map);
+      })
+  
+      function onEachFeature(feature, layer) {
+          layer.on('click', function (e) {
+            var template = $('#polygonSummary-template').text();
+            that.sql.execute(template, {coundist:feature.properties.coundist})
+              .done(function(data) {
+                data=data.rows[0];
+                data.coundist = feature.properties.coundist;
+                that.sidebarModel.set(data);
+                that.sidebarView.slideIn();
+              })
+          });
+        }
+    },
+
+    leafletDrawInit: function() {
+      var that = this;
+      //leaflet draw stuff
+
+      var options = {
+          position: 'topright',
+          draw: {
+              polyline:false,
+              polygon: {
+                  allowIntersection: false, // Restricts shapes to simple polygons
+                  drawError: {
+                      color: '#e1e100', // Color the shape will turn when intersects
+                      message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
+                  },
+                  shapeOptions: {
+                      color: '#bada55'
+                  }
+              },
+              circle: true, 
+              rectangle: {
+                  shapeOptions: {
+                      clickable: false
+                  }
+              },
+              marker:false
+          }
+      };
+
+      var drawControl = new L.Control.Draw(options);
+      this.map.addControl(drawControl);
+      $('.leaflet-draw-toolbar').hide();
+
+      var customPolygon;
+ 
+      this.map.on('draw:created', function (e) {
+        
+
+        var type = e.layerType,
+            layer = e.layer;
+
+        that.drawnLayer=e.layer;
+
+        var feature = e.layer.toGeoJSON();
+
+        that.fetchPolygonData(feature.geometry,function(d){
+          d.city = d.zipcode = 'Selected Area';
+
+          that.sidebarModel.set(d);
+          that.sidebarView.transformData();
+          that.sidebarView.slideIn();
+        });
+
+        that.map.addLayer(layer);
+      });
+
+      this.map.on('draw:drawstart', function (e) {
+
+        that.sidebarView.slideOut();
+
+        console.log('start');
+        if (that.drawnLayer) {
+          that.map.removeLayer(that.drawnLayer);
+        }
+      });
+    },
   });
 })(jQuery);

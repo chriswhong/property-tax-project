@@ -111,3 +111,20 @@ Council District Choropleth
 #councildistricts15 [ propertytax <= 144260752] {
    polygon-fill: #EDF8FB;
 }
+
+/* Summary details for a council district */
+
+SELECT count(*), sum(emv) as emv, sum(bav) as bav, sum(tbea) as tbea, sum(tba) as tba, sum(propertytax) as propertytax FROM (SELECT a.the_geom, b.bav,b.emv,b.tba, b.tbea, CASE WHEN b.condo ='' THEN b.propertytax ELSE  c.propertytax END as propertytax
+FROM pluto15v1 a
+LEFT JOIN june15bbls b
+ON a.bbl = b.bbl
+LEFT JOIN (
+SELECT condonumber,sum(propertytax) as propertytax 
+  FROM june15bbls
+  WHERE condo = 'unit'
+  GROUP BY condonumber
+) c
+ON a.condono::text = c.condonumber) x, (SELECT the_geom as geom FROM councildistricts15 WHERE coundist = '33') y
+WHERE ST_Within(x.the_geom,y.geom)
+
+

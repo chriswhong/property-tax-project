@@ -11,7 +11,7 @@ var app = app || {};
     tagName:  'div',
     id: 'infoWindow',
 
-    template: $('#zipInfo-template').html(),
+    template: $('#infoWindow-template').html(),
 
     initialize: function () {
       this.listenTo(this.model, 'change', this.render);

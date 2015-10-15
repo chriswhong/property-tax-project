@@ -1,0 +1,124 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>The HTML5 Herald</title>
+    <link href=
+      "https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/themes/css/cartodb.css" rel="stylesheet">
+    <style>
+      /*Custom Legend*/
+
+      .customLegend {
+        box-sizing:border-box;
+      }
+
+      .customLegend .legendItem {
+        height:22px;
+        width:100%;
+      }
+
+      .customLegend .labelText {
+        height: 22px;
+        padding-top: 3px;
+        box-sizing: border-box;
+        text-align: right;
+        width: 80px;
+      }
+
+      .customLegend .left {
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        -ms-border-radius: 3px;
+        -o-border-radius: 3px;
+        border-radius: 3px;
+        -moz-background-clip: padding;
+        -webkit-background-clip: padding;
+        background-clip: padding;
+        /* box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2); */
+        border: 1px solid #b3b3b3;
+        width:30px;
+        display:inline-block;
+        vertical-align: top;
+        margin-right: 10px;
+
+      }
+
+      .customLegend .right {
+        display:inline-block;
+        vertical-align: top;
+      }
+
+      .customLegend h3 {
+        margin-top: 0;
+        font-size: 1.17em;
+        margin-bottom: 10px;
+        font-weight:800;
+      }
+
+      .customLegend h4 {
+        font: normal 13px "Helvetica",Arial;
+        margin-bottom: 10px;
+        font-weight:800;
+      }
+
+      .customLegend p {
+        margin-bottom: 7px;
+      }
+
+      .customLegend .legendRow {
+        margin-bottom: 10px;
+      }
+
+      .customLegend .noBorder {
+        border:none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cartodb-legend-stack" style="display: block;">
+      <div class="cartodb-legend choropleth customLegend" style="display: block;">
+        <h3>Legend</h3>
+        <h4>Annual Tax Due</h4>
+        <div class="legendRow">
+          <div class="left">
+            <div class="legendItem" style="background-color:#005824"></div>
+            <div class="legendItem" style="background-color:#238B45"></div>
+            <div class="legendItem" style="background-color:#41AE76"></div>
+            <div class="legendItem" style="background-color:#66C2A4"></div>
+            <div class="legendItem" style="background-color:#CCECE6"></div>
+            <div class="legendItem" style="background-color:#D7FAF4"></div>
+            <div class="legendItem" style="background-color:#EDF8FB"></div>
+          </div>
+          <div class="right">
+            <div class="labelText"><= $67.3M</div>
+            <div class="labelText">$1.6M</div>
+            <div class="labelText">$39.0K</div>
+            <div class="labelText">$20.4K</div>
+            <div class="labelText">$5.8K</div>
+            <div class="labelText">$4.5K</div>
+            <div class="labelText">$4.2K</div>
+          </div>
+        </div>
+        <div class="legendRow">
+          <div class="left">
+            <div class="legendItem" style="background-color:#ff00a5;"></div>
+          </div>
+          <div class="right">
+            <div class="labelText"> No Tax Due</div>
+          </div>
+        </div>
+        <h4>Building Type</h4>
+        <div class="legendRow">
+          <div class="left noBorder">
+            <div class="legendItem" style="border:2px solid #F6FF17;"></div>
+          </div>
+          <div class="right">
+            <div class="labelText">Condo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
