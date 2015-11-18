@@ -58,14 +58,16 @@
     </div><!-- /.navbar-collapse -->
 </nav>
 <div id="container">
-    <div id="map" class="u-pa">
-
-    </div>
-    <div class="btn-group btn-group-main" role="group" aria-label="...">
-      <button type="button" class="btn btn-default lots">Tax Lots</button>
-      <button type="button" class="btn btn-default councilDistricts">Council Districts</button>
-      <button type="button" class="btn btn-default draw">Draw an Area</button>
-    </div>
+  <div class="row-fluid mainRow">
+      <div id="sidebarContainer" class="cols">Sidebar</div>
+      <div id="map" class="span8 cols">...</div>
+  </div>
+   
+  <div class="btn-group btn-group-main" role="group" aria-label="...">
+    <button type="button" class="btn btn-default lots">Tax Lots</button>
+    <button type="button" class="btn btn-default councilDistricts">Council Districts</button>
+    <button type="button" class="btn btn-default draw">Draw an Area</button>
+  </div>
 </div>
 <script type="text/template" id="infoWindow-template">
     <div class="cartodb-tooltip-content-wrapper">
@@ -103,6 +105,35 @@
 
 
 </script>
+<script type="text/template" id="lot-sidebar-template">
+  <div class="sidebarItem">BBL: {{bbl}}</div>
+  <div class="sidebarItem">{{{address}}}</div>
+  <div class="sidebarItem">Est. Market Value: {{emv}}</div>
+  <div class="sidebarItem">Billable Assessed Value: {{bav}}</div>
+  <div class="sidebarItem">Tax Class: {{taxclass}}</div>
+  <div class="sidebarItem">Tax Rate: {{taxrate}}</div>
+  <div class="sidebarItem">Tax Before Exemptions & Abatements: {{tbea}}</div>
+  <div class="sidebarItem">Tax Before Abatements: {{tba}}</div>
+
+  <div class="sidebarItem">Total Tax: {{propertytax}}</div>
+  {{#exemptions}}
+  Exemptions:
+  {{/exemptions}}
+  {{#exemptions}}
+  {{detail}}{{amount}}
+  {{/exemptions}}
+  
+  {{#abatements}}
+  Abatements:
+  {{/abatements}}
+  {{#abatements}}
+  {{detail}}{{amount}}
+   {{/abatements}}
+
+<a href = 'http://nycprop.nyc.gov/nycproperty/StatementSearch?bbl={{bbl}}&stmtDate=20150605&stmtType=SOA'>June 2015 Tax Bill</a>
+
+</script>
+
 
 
 <script type="text/template" id="polygonSummary-template">
@@ -139,9 +170,11 @@ WHERE ST_Within(x.the_geom,y.geom)
 <script src="js/backbone.js"></script>
 <script src="js/models/infoWindow.js"></script>
 <script src="js/models/sidebar.js"></script>
+<script src="js/models/lotSidebar.js"></script>
 <script src="js/views/app.js"></script>
 <script src="js/views/infoWindow.js"></script>
 <script src="js/views/sidebar.js"></script>
+<script src="js/views/lotSidebar.js"></script>
 <script src="js/routers/router.js"></script>
 <script src="js/app.js"></script>
 

@@ -16,6 +16,16 @@ html, body, #container {
     height: 100%;
 }
 
+#sidebarContainer {
+  width: 350px;
+  float:right;
+}
+
+.mainRow {
+  height:100%;
+}
+
+
 /* sidebar view*/
 .sidebar {
   height: auto;

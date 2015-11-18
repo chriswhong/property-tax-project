@@ -35,6 +35,13 @@ var app = app || {};
       this.sidebarView = new app.SidebarView({model:this.sidebarModel});
       this.$el.append(this.sidebarView.render().el);
 
+      //add the lotSidebarView
+      this.lotSidebarModel = new app.LotSidebarModel(); 
+      this.lotSidebarView = new app.LotSidebarView({model:this.lotSidebarModel});
+      console.log('view',this.lotSidebarView)
+      $('#sidebarContainer').append(this.lotSidebarView.el);
+
+
       //init map
       this.map  = new L.Map('map', { 
         center: [40.695998,-73.999443],
@@ -100,10 +107,10 @@ var app = app || {};
 
       this.lotsLayer = this.layer.getSubLayer(0);
       this.lotsLayer.setInteraction(true);
-      this.lotsLayer.setInteractivity('cartodb_id');
+      this.lotsLayer.setInteractivity('cartodb_id, bbl');
 
       this.lotsLayer.on('featureClick', function(ev, pos, latlng, data){
-        console.log(data);
+        that.lotSidebarView.fetch( data.bbl );
       });
 
     

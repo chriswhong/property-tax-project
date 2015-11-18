@@ -4,8 +4,6 @@ var app = app || {};
 (function ($) {
   'use strict';
 
-//View for the Infowindow that follows the mouse when hovering over the map
-
   app.SidebarView = Backbone.View.extend({
 
     tagName:  'div',
