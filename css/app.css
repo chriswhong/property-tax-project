@@ -5,6 +5,23 @@ html, body, #container {
   font-family:  'Lato'
 }
 
+div.cartodb-legend-stack {
+  left: 20px;
+  right: initial;
+}
+
+.td-full {
+  padding: 2px 8px 2px 8px !important;
+}
+
+.exab {
+  background: #F0F0F0 !important;
+}
+
+.exab-amount {
+  color: red;
+}
+
 #container {
   position: fixed;
   top: 0;

@@ -59,7 +59,8 @@
 </nav>
 <div id="container">
   <div class="row-fluid mainRow">
-      <div id="sidebarContainer" class="cols">Sidebar</div>
+      <div id="sidebarContainer" class="col-sm-12">
+      </div>
       <div id="map" class="span8 cols">...</div>
   </div>
    
@@ -106,31 +107,97 @@
 
 </script>
 <script type="text/template" id="lot-sidebar-template">
-  <div class="sidebarItem">BBL: {{bbl}}</div>
-  <div class="sidebarItem">{{{address}}}</div>
-  <div class="sidebarItem">Est. Market Value: {{emv}}</div>
-  <div class="sidebarItem">Billable Assessed Value: {{bav}}</div>
-  <div class="sidebarItem">Tax Class: {{taxclass}}</div>
-  <div class="sidebarItem">Tax Rate: {{taxrate}}</div>
-  <div class="sidebarItem">Tax Before Exemptions & Abatements: {{tbea}}</div>
-  <div class="sidebarItem">Tax Before Abatements: {{tba}}</div>
+  <h3><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Property Details</h3>
+ 
+  <h4>{{streetaddress}}</h4>
+  <p><strong>BBL:</strong> {{bbl}}</p>
+  <p><strong>Tax Class:</strong> {{taxclass}} ({{taxrate}} tax rate)</p>
 
-  <div class="sidebarItem">Total Tax: {{propertytax}}</div>
-  {{#exemptions}}
-  Exemptions:
-  {{/exemptions}}
-  {{#exemptions}}
-  {{detail}}{{amount}}
-  {{/exemptions}}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Owner Information</h3>
+  </div>
+  <div class="panel-body">
+    {{{address}}}
+  </div>
+</div>
+
+<div class="table-responsive">
+   <table class="table table-bordered">
+      <colgroup>
+         <col class="col-sm-9">
+         <col class="col-sm-3">
+      </colgroup>
+
+      <tbody>
+         <tr>
+            <td>Estimated Market Value</td>
+            <td class="text-right">{{emv}}</td>
+         </tr>
+         <tr>
+            <td>Billable Assessed Value</td>
+            <td class="text-right">{{bav}}</td>
+         </tr>
+         <tr>
+            <td>Tax before Exemptions and Abatements (BAV * {{taxrate}})</td>
+            <td class="text-right">{{tbea}}</td>
+         </tr>
+        {{#exemptions.length}}
+        <tr class="exab">
+            <td colspan="2" class="td-full"><strong>Exemptions</strong></td>
+        </tr>
+        {{/exemptions.length}}
+        {{^exemptions.length}}
+        <tr class="exab">
+            <td colspan="2" class="td-full"><strong>No Exemptions</strong></td>
+        </tr>
+        {{/exemptions.length}}
+        {{#exemptions}}
+        <tr class="exab">
+            <td>{{detail}}</td>
+            <td class="text-right exab-amount">{{amount}}</td>
+         </tr>
   
-  {{#abatements}}
-  Abatements:
-  {{/abatements}}
-  {{#abatements}}
-  {{detail}}{{amount}}
-   {{/abatements}}
+        {{/exemptions}}
+         <tr>
+            <td>Tax before Abatements</td>
+            <td class="text-right">{{tba}}</td>
+         </tr>
+        {{#abatements.length}}
+        <tr class="exab">
+            <td colspan="2" class="td-full"><strong>Abatements</strong></td>
+        </tr>
+        {{/abatements.length}}
+        {{^abatements.length}}
+        <tr class="exab">
+            <td colspan="2" class="td-full"><strong>No Abatements</strong></td>
+        </tr>
+        {{/abatements.length}}
+        {{#abatements}}
+        <tr class="exab">
+            <td>{{detail}}</td>
+            <td class="text-right exab-amount">{{amount}}</td>
+         </tr>
+  
+        {{/abatements}}         
+         <tr>
+            <td>Total tax bill</td>
+            <td class="text-right">{{propertytax}}</td>
+         </tr>
+        
+      </tbody>
+   </table>
+</div>
 
-<a href = 'http://nycprop.nyc.gov/nycproperty/StatementSearch?bbl={{bbl}}&stmtDate=20150605&stmtType=SOA'>June 2015 Tax Bill</a>
+<a href='http://nycprop.nyc.gov/nycproperty/StatementSearch?bbl={{bbl}}&stmtDate=20150605&stmtType=SOA' target="_blank">
+  <button type="button" class="btn btn-primary">
+    <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span> View June 2015 Tax Bill
+  </button>
+</a>
+
+
+
+
 
 </script>
 
