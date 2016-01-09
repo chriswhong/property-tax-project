@@ -26,8 +26,7 @@ var app = app || {};
       app.appView.setView(zoom,lat,lon);
     },
 
-    defaultRoute: function(actions) {
-      console.log('defaultRoute');
+    defaultRoute: function(actions) { 
       app.appView.showLots();
     }
 

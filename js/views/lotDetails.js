@@ -4,31 +4,31 @@ var app = app || {};
 (function ($) {
   'use strict';
 
-  app.LotSidebarView = Backbone.View.extend({
+  app.LotDetailsView = Backbone.View.extend({
 
     tagName:  'div',
-    className: 'lot-sidebar',
+    className: 'lot-details',
 
-    template: $('#lot-sidebar-template').html(),
+    template: $('#lot-details-template').html(),
 
     initialize: function () {
-       this.listenTo(this.model, 'change', this.render);
+       //this.listenTo(this.model, 'change', this.render);
     },
 
     render: function () {
-      console.log('render');
       var d = this.model.toJSON();
 
       this.$el.html(Mustache.to_html(this.template,d));
 
       return this;
+    },
+
+    empty: function () {
+      this.$el.empty();
     }
-  
 
 
 
-
-    
-
+ 
   });
 })(jQuery);

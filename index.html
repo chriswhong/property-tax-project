@@ -11,52 +11,59 @@
     <link href="./favicon.ico" rel="icon">
 
     <title>Tax Man Cometh</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link href=
     "https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/themes/css/cartodb.css" rel="stylesheet">
     <link href="./css/nv.d3.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="css/leaflet.draw.css">
+   <!--  <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'> -->
+   <!--  <link rel="stylesheet" href="css/leaflet.draw.css"> -->
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="css/app.css" rel="stylesheet" type="text/css">
     <link href="./favicon.png" rel="icon" type="image/png">
 </head>
 
 <body>  
-    <nav class="navbar navbar-custom" role="navigation">
-        <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Tax Man Cometh</a>
+          <div class="navbar-icon-container">
+            <a href="#" class="navbar-icon pull-right visible-xs" id="nav-btn"><i class="fa fa-bars fa-lg white"></i></a>
+            <a href="#" class="navbar-icon pull-right visible-xs" id="sidebar-toggle-btn"><i class="fa fa-search fa-lg white"></i></a>
+          </div>
+          <a class="navbar-brand" href="#">CartoDB Template</a>
         </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse navbar-ex1-collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="#">About</a></li>
-                <li><a href="#">Get the Data</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                      <li><a href="#">About</a></li>
-                      <li><a href="#">Get Data</a></li>
-                      <li><a href="#">Something else here</a></li>
-                      <li><a href="#">Separated link</a></li>
-                      <li><a href="#">One more separated link</a></li>
-                  </ul>
-              </li>
-          </ul>
+        <div class="navbar-collapse collapse">
           <form class="navbar-form navbar-right" role="search">
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="Address Search">
+            <div class="form-group has-feedback">
+                <span class="twitter-typeahead" style="position: static; display: block; direction: ltr;"><input id="searchbox" type="text" placeholder="Search" class="form-control tt-input" autocomplete="off" spellcheck="false" dir="auto" style="position: relative; vertical-align: top;"><pre aria-hidden="true" style="position: absolute; visibility: hidden; white-space: pre; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span class="tt-dropdown-menu" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none; right: auto;"><div class="tt-dataset-Boroughs"></div><div class="tt-dataset-Theaters"></div><div class="tt-dataset-Museums"></div><div class="tt-dataset-GeoNames"></div></span></span>
+                <span id="searchicon" class="fa fa-search form-control-feedback"></span>
             </div>
-        </form>
-    </div><!-- /.navbar-collapse -->
-</nav>
+          </form>
+          <ul class="nav navbar-nav">
+            <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn"><i class="fa fa-question-circle white"></i>&nbsp;&nbsp;About</a></li>
+            <li class="dropdown">
+              <a id="toolsDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-globe white"></i>&nbsp;&nbsp;Tools <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="full-extent-btn"><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Zoom To Full Extent</a></li>
+                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="legend-btn"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Show Legend</a></li>
+                <li class="divider hidden-xs"></li>
+                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="login-btn"><i class="fa fa-user"></i>&nbsp;&nbsp;Login</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" id="downloadDrop" href="#" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-cloud-download white"></i>&nbsp;&nbsp;Download <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="data/boroughs.geojson" download="boroughs.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Boroughs</a></li>
+                  <li><a href="data/subways.geojson" download="subways.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Subway Lines</a></li>
+                  <li><a href="data/DOITT_THEATER_01_13SEPT2010.geojson" download="theaters.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Theaters</a></li>
+                  <li><a href="data/DOITT_MUSEUM_01_13SEPT2010.geojson" download="museums.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Museums</a></li>
+                </ul>
+            </li>
+            <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-list white"></i>&nbsp;&nbsp;POI List</a></li>
+          </ul>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </div>
 <div id="container">
   <div class="row-fluid mainRow">
       <div id="sidebarContainer" class="col-sm-12">
@@ -64,11 +71,11 @@
       <div id="map" class="span8 cols">...</div>
   </div>
    
-  <div class="btn-group btn-group-main" role="group" aria-label="...">
+<!--   <div class="btn-group btn-group-main" role="group" aria-label="...">
     <button type="button" class="btn btn-default lots">Tax Lots</button>
     <button type="button" class="btn btn-default councilDistricts">Council Districts</button>
     <button type="button" class="btn btn-default draw">Draw an Area</button>
-  </div>
+  </div> -->
 </div>
 <script type="text/template" id="infoWindow-template">
     <div class="cartodb-tooltip-content-wrapper">
@@ -122,7 +129,11 @@
   </div>
 </div>
 
-<div class="table-responsive">
+</script>
+
+<script type="text/template" id="lot-details-template">
+  
+  <div class="table-responsive">
    <table class="table table-bordered">
       <colgroup>
          <col class="col-sm-9">
@@ -195,13 +206,22 @@
   </button>
 </a>
 
-
-
-
-
 </script>
 
+<script type="text/template" id="condoList-template">
+<h4>Condo Units</h4>
+<ul class="list-group condoList">
+  
 
+
+{{#.}}
+  <li class="list-group-item">
+    Unit {{{address}}}
+  </li>
+{{/.}}  
+
+</ul>
+</script>
 
 <script type="text/template" id="polygonSummary-template">
   SELECT count(*), sum(emv) as emv, sum(bav) as bav, sum(tbea) as tbea, sum(tba) as tba, sum(propertytax) as propertytax FROM (SELECT a.the_geom, b.bav,b.emv,b.tba, b.tbea, CASE WHEN b.condo ='' THEN b.propertytax ELSE  c.propertytax END as propertytax
@@ -242,6 +262,8 @@ WHERE ST_Within(x.the_geom,y.geom)
 <script src="js/views/infoWindow.js"></script>
 <script src="js/views/sidebar.js"></script>
 <script src="js/views/lotSidebar.js"></script>
+<script src="js/views/lotDetails.js"></script>
+<script src="js/views/condoList.js"></script>
 <script src="js/routers/router.js"></script>
 <script src="js/app.js"></script>
 

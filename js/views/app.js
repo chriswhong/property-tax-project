@@ -12,7 +12,7 @@ var app = app || {};
 
     // listen for mousemove to move the infoWindow
     events: {
-      'mousemove #map':'moveInfoWindow',
+      //'mousemove #map':'moveInfoWindow',
       'click button.lots':'showLots',
       'click button.councilDistricts':'showCouncilDistricts',
       'click button.draw':'showDraw'
@@ -26,9 +26,9 @@ var app = app || {};
       this.sql = new cartodb.SQL({ user: 'cwhong' });
 
       //add the infoWindowView
-      this.infoWindowModel = new app.InfoWindowModel();
-      this.infoWindowView = new app.InfoWindowView({model:this.infoWindowModel});
-      this.$el.append(this.infoWindowView.render().el)
+      // this.infoWindowModel = new app.InfoWindowModel();
+      // this.infoWindowView = new app.InfoWindowView({model:this.infoWindowModel});
+      // this.$el.append(this.infoWindowView.render().el)
 
       //add the sidebarView
       this.sidebarModel = new app.SidebarModel(); 
@@ -38,8 +38,17 @@ var app = app || {};
       //add the lotSidebarView
       this.lotSidebarModel = new app.LotSidebarModel(); 
       this.lotSidebarView = new app.LotSidebarView({model:this.lotSidebarModel});
-      console.log('view',this.lotSidebarView)
+  
       $('#sidebarContainer').append(this.lotSidebarView.el);
+
+      //detailsView
+      this.lotDetailsView = new app.LotDetailsView({model:this.lotSidebarModel});
+      $('#sidebarContainer').append(this.lotDetailsView.el);
+
+      //condoList
+      this.condoListView = new app.CondoListView();
+      $('#sidebarContainer').append(this.condoListView.el);
+
 
 
       //init map
@@ -67,7 +76,7 @@ var app = app || {};
         that.initializeMap();
       })
   
-      this.leafletDrawInit();
+      this.leafletDrawInit(); 
 
     },
 
@@ -75,42 +84,54 @@ var app = app || {};
       var that = this;
       //hide all layers
 
-      this.hideAllLayers();
+      //this.hideAllLayers();
 
-      this.councilDistrictsLayer = this.layer.getSubLayer(1);
-      this.councilDistrictsLayer.setInteraction(true);
-      this.councilDistrictsLayer.setInteractivity('cartodb_id,coundist,propertytax');
+      // this.councilDistrictsLayer = this.layer.getSubLayer(1);
+      // this.councilDistrictsLayer.setInteraction(true);
+      // this.councilDistrictsLayer.setInteractivity('cartodb_id,coundist,propertytax');
 
    
 
-      this.councilDistrictsLayer.on('featureOver', function(ev, pos, latlng, data){
-        //show the infowindow
-        var d = {
-          visible:true,
-          title: 'District ' + data.coundist,
-          value: that.formatNumber(data.propertytax)
-        };
+      // this.councilDistrictsLayer.on('featureOver', function(ev, pos, latlng, data){
+      //   //show the infowindow
+      //   var d = {
+      //     visible:true,
+      //     title: 'District ' + data.coundist,
+      //     value: that.formatNumber(data.propertytax)
+      //   };
 
-        that.infoWindowModel.set(d);
+      //   that.infoWindowModel.set(d);
 
-        //check to see if it's the same feature so we don't waste an API call
-        if(data.cartodb_id != that.hoverID) {
-          that.renderPolygon(data.cartodb_id);
-          that.hoverID = data.cartodb_id;
-        }
+      //   //check to see if it's the same feature so we don't waste an API call
+      //   if(data.cartodb_id != that.hoverID) {
+      //     that.renderPolygon(data.cartodb_id);
+      //     that.hoverID = data.cartodb_id;
+      //   }
 
-      })
-        .on('featureOut', function() {
-          that.infoWindowModel.set({visible:false});
-        })
-      ;
+      // })
+      //   .on('featureOut', function() {
+      //     that.infoWindowModel.set({visible:false});
+      //   })
+      // ;
 
       this.lotsLayer = this.layer.getSubLayer(0);
-      this.lotsLayer.setInteraction(true);
-      this.lotsLayer.setInteractivity('cartodb_id, bbl');
+      // this.lotsLayer.setInteraction(true);
+      // this.lotsLayer.setInteractivity('cartodb_id, bbl');
+
+      this.lotsLayer.on('featureOver', function(ev, pos, latlng, data){
+        $('#map').css( 'cursor', 'pointer' );
+      })
+        .on('featureOut', function(ev, pos, latlng, data){
+        $('#map').css( 'cursor', '' );
+      });
+
 
       this.lotsLayer.on('featureClick', function(ev, pos, latlng, data){
-        that.lotSidebarView.fetch( data.bbl );
+        console.log('fetching data for ', data.bbl);
+        that.lotSidebarModel.fetch( data.bbl );
+
+
+
       });
 
     
@@ -151,7 +172,6 @@ var app = app || {};
 
     hideAllLayers: function() {
       var view = this;
-      console.log('hide',this)
       view.layer.layers.forEach(function(l,i) {
         view.layer.getSubLayer(i).hide();
       });

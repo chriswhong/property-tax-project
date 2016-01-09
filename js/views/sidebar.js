@@ -18,7 +18,6 @@ var app = app || {};
     render: function () {
 
       var d = this.model.toJSON();
-      console.log(d);
 
       d.emv = this.formatNumber(d.emv);
       d.bav = this.formatNumber(d.bav);
