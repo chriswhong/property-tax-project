@@ -14,9 +14,12 @@ var app = app || {};
     fetch: function(bbl) {
       console.log('LotSidebarModel.fetch()');
       var that=this;
+
+      console.log(bbl)
+
       //get data for the selected lot
       var sql = new cartodb.SQL({ user: 'cwhong' });
-      var query = Mustache.render("SELECT a.*,b.address as streetaddress FROM june15bbls a INNER JOIN pluto15v1 b ON a.bbl = b.bbl WHERE a.bbl = '{{bbl}}'",{bbl: bbl});
+      var query = Mustache.render("SELECT a.*,b.address as streetaddress FROM june15bbls a LEFT JOIN pluto15v1 b ON a.bbl = b.bbl WHERE a.bbl = '{{bbl}}'",{bbl: bbl});
       sql.execute(query)
       .on('done',function(data){
         var lotData = data.rows[0];
@@ -62,14 +65,14 @@ var app = app || {};
             //check if condo, if so render
           if (lotData.condo=="lot") {
             
-            app.appView.lotDetailsView.empty();
+           
             app.appView.condoListView.fetch({
               condonumber: lotData.condonumber,
               borough: lotData.bbl.toString().charAt(0)
             });
         
           } else {
-            app.appView.condoListView.empty();
+          
             app.appView.lotDetailsView.render();
           }
            

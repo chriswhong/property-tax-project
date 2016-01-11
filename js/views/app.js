@@ -128,6 +128,8 @@ var app = app || {};
 
       this.lotsLayer.on('featureClick', function(ev, pos, latlng, data){
         console.log('fetching data for ', data.bbl);
+
+        that.clearSidebar();
         that.lotSidebarModel.fetch( data.bbl );
 
 
@@ -258,6 +260,11 @@ var app = app || {};
               })
           });
         }
+    },
+
+    clearSidebar: function() {
+      app.appView.lotDetailsView.empty();
+      app.appView.condoListView.empty();
     },
 
     leafletDrawInit: function() {

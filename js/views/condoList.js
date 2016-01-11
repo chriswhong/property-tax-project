@@ -11,6 +11,10 @@ var app = app || {};
 
     template: $('#condoList-template').html(),
 
+    events: {
+      'click .list-group-item  ':'condoDetails'
+    },
+
     initialize: function () {
        //this.listenTo(this.model, 'change', this.render);
     },
@@ -22,6 +26,12 @@ var app = app || {};
     
 
       return this;
+    },
+
+    condoDetails: function (e) {
+
+      var bbl = $(e.target).data('bbl');
+      app.appView.lotSidebarModel.fetch( bbl );
     },
 
     fetch: function (params) {
